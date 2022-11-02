@@ -8,7 +8,8 @@ The elements in the BASH will work out of the box on a Mac.  You might need to i
 You'll need to do a bit of manual config to make this work properly.
 
 - Google Chrome: https://www.google.com/chrome/dr/download/
-- chromedriver (For you specific version of Chrome): https://chromedriver.chromium.org/downloads
+- chromedriver (For your specific version of Chrome): https://chromedriver.chromium.org/downloads
+-- Test
 
 
 In Terminal:
