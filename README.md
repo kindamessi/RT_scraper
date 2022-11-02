@@ -10,10 +10,14 @@ chromedriver (For you specific version of Chrome): https://chromedriver.chromium
 Once downloaded and unzipped, move chromedriver to /usr/local/bin/ folder
 
 In Terminal:
-    sudo mv ~/Downloads/chromedriver /usr/local/bin/
+```sh
+sudo mv ~/Downloads/chromedriver /usr/local/bin/
+```
 
 Then, in Terminal open /usr/local/bin/ and right-click on chromedriver, and click "Allow"
-    open /usr/local/bin/
+```sh
+open /usr/local/bin/
+```
 
 python3 and pip3 (probably doesn't need to be 3.8): https://www.python.org/downloads/release/python-380/
 
