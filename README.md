@@ -4,6 +4,23 @@ This script will scrape reviews from Rotten Tomatoes.  Use it if you want a form
 
 The elements in the BASH will work out of the box on a Mac.  You might need to install BSD versions of grep/awk/sed (or you can modify switches on those binaries) to make it work on a Linux distribution.
 
+## How it works
+Go ahead and clone the whole repository down.  If your browser doesn't automatically expand zip file, click on it to expand it.
+After you've installed all the prereqs, listed below, you'll first run scrape_rotten.py.
+```sh
+cd ~/Downloads/RT_scrape-main
+python3 scrape_rotten.py
+```
+scrape_rotten.py will ask you what movie you're reviewing, and the URL of reviews you want to pull.  This works with both verified reviews and other reviews on the Rotten Tomatoes website.
+> Warning: This script will take a long time to run.  As long as you see your Chrome browser going to the next page, it's still working.
+
+Once you no longer see Chrome going to the next page of reviews on the Rotten Tomatoes website, you'll want to run fixScrape.sh 
+```sh
+./fixScrape.sh
+```
+This script will display progress to you as it goes through the raw data pulled during the python script.  You'll see the counter count three times.  This script takes an exceptionally long time to run.  
+> For example 30,000 reviews might take it 10 hours to completely run.  
+
 ## Prereqs
 You'll need to do a bit of manual config to make this work properly.
 
