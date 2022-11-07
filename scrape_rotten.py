@@ -1,6 +1,19 @@
 #!/Library/Frameworks/Python.framework/Versions/3.8/bin/python3
 
-##add something to pull the movie title
+####################################################################
+## Script will pull review content from Rotten Tomatoes           ##
+## Raw content will be placed into a folder you name in /tmp      ##
+## Script runs in tandem with a BASH script included in repo      ##
+##                                                                ##
+## Text/regex could definitely have been done with Python         ##
+## Please write that in, if you want.  Will probably be more      ##
+## efficient than the BASH                                        ##
+##                                                                ##
+## Nick Plank                                                     ##
+## St. Norbert College                                            ##
+## 11/7/2022                                                      ##
+####################################################################
+
 
 from bs4 import BeautifulSoup
 from selenium import webdriver
@@ -50,8 +63,6 @@ while tester in test_str:
     raw_user = html.find_all("div", {"class": "audience-reviews__user-wrap"})
     raw_date = html.find_all("span",{"class":"audience-reviews__duration"})
 
-    #print(raw_user)
-    #print(raw_date)
     
 #pull date of review
     with open (revFile,"a") as o:
@@ -83,39 +94,10 @@ while tester in test_str:
             o.write(number)
             o.write(date)
             datenum = datenum + 1
-    # with open ("/tmp/reviews.txt","a") as o:
-    #     for review in text_review:
-    #         number = str(revnum)
-    #         review = str(review)
-    #         o.write("revNum ")
-    #         o.write(number)
-    #         o.write(review)
-    #         #o.write(string_full)
-    #         revnum = revnum + 1
-    # with open ("/tmp/starFile.txt","a") as o:
-    #     for star in starfinder:
-    #         number = str(starnum)
-    #         star = str(star)
-    #         o.write(number)
-    #         o.write(star)
-    #         starnum = starnum + 1
-    # with open ("/tmp/userFile.txt","a") as o:
-    #     for user in raw_user:
-    #         number = str(usernum)
-    #         user = str(user)
-    #         o.write(number)
-    #         o.write(user)
-    #         usernum = usernum + 1
-    # with open ("/tmp/dateFile.txt","a") as o:
-    #     for date in raw_date:
-    #         number = str(datenum)
-    #         date = str(date)
-    #         o.write(number)
-    #         o.write(date)
-    #         datenum = datenum + 1
-
 
     next_buttons = driver.find_element(By.XPATH, "//button[@class='js-prev-next-paging-next btn prev-next-paging__button prev-next-paging__button-right']")
     next_buttons.click()
     test_str=str(next_buttons)
+
+    ## if you notice the script doesn't let the Rotten Tomatoes page load, you might need to make it sleep longer.
     time.sleep(1)

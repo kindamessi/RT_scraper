@@ -1,6 +1,15 @@
 #!/bin/bash
 
-## Fix the stuff we scraped from Rotten Tomatoes
+###################################################################################
+## Fix the stuff we scraped from Rotten Tomatoes                                 ##
+## Takes a long time to run                                                      ##
+## If you'd like, rewrite this with something that does a better job with regex, ##
+## or only pull the things you need with the python                              ##
+##                                                                               ##
+## Nick Plank                                                                    ##
+## St. Norbert College                                                           ##
+## 11/7/2022                                                                     ##
+###################################################################################
 
 #set -x
 
