@@ -1,11 +1,11 @@
 # RT_scraper
 
-This script will scrape reviews from Rotten Tomatoes.  Use it if you want a formatted CSV of review content, ratings, user, and number of written reviews on a certain piece of media in Rotten Tomatoes.
+These scripts will scrape reviews from Rotten Tomatoes.  Use them if you want a formatted CSV of review content, ratings, user, and number of written reviews on a certain piece of media in Rotten Tomatoes.
 
 The elements in the BASH will work out of the box on a Mac.  You might need to install BSD versions of grep/awk/sed (or you can modify switches on those binaries) to make it work on a Linux distribution.
 
 ## How it works
-Go ahead and clone the whole repository down.  If your browser doesn't automatically expand zip file, click on it to expand it.
+Go ahead and clone the whole repository down.  If your browser doesn't automatically expand zip files, click on it to expand it.
 After you've installed all the prereqs, listed below, you'll first run scrape_rotten.py.
 ```sh
 cd ~/Downloads/RT_scrape-main
