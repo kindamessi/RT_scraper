@@ -8,7 +8,7 @@ The elements in the BASH will work out of the box on a Mac.  You might need to i
 Go ahead and clone the whole repository down.  If your browser doesn't automatically expand zip files, click on it to expand it.
 After you've installed all the prereqs, listed below, you'll first run scrape_rotten.py.
 ```sh
-cd ~/Downloads/RT_scrape-main
+cd ~/Downloads/RT_scraper-main
 python3 scrape_rotten.py
 ```
 scrape_rotten.py will ask you what movie you're reviewing, and the URL of reviews you want to pull.  This works with both verified reviews and other reviews on the Rotten Tomatoes website.
