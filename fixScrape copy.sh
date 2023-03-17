@@ -17,7 +17,7 @@ myUser=$(whoami)
 
 echo -ne "Name of movie: "
 read movie
-
+echo $movie
 
 curDir=$(pwd)
 
@@ -51,7 +51,7 @@ cat "$dateFile" | sed 's/<\/span>/\n/g' | sed 's/<span class="audience-reviews__
 
 
 ##accommodate commenters without accounts or verified users
-totalNum=$(cat "/tmp/$movie/userFile.txt" | grep "audience-reviews__name-wrap" | tail -1 | sed 's/<\/div>//' | sed 's/<div class="audience-reviews__name-wrap">//' )
+totalNum=$(cat "/tmp/$movie/userFile.txt" | grep "audience-reviews__name-wrap" | tail -1 | sed 's/<\/div>//' | sed 's/<div class="audience-reviews__user-wrap">//' )
 
 echo "Working on users..."
 echo ""
@@ -60,39 +60,36 @@ touch "/tmp/$movie/author_num.txt"
 num=1
 while read line;
 do
-    echo -ne "Working on $num/$totalNum\r"
-    namedUser=$(cat "/tmp/$movie/userFile.txt" | grep -A2 "$num<div class" | head -2 | grep "href" )
-    verifiedUser=$(cat "/tmp/$movie/userFile.txt" | grep -A4 "$num<div class" | head -4 | tail -1 | grep "data-qa" )
+echo -ne "Working on $num/$totalNum\r"
+namedUser=$(cat "/tmp/$movie/userFile.txt" | grep -A2 "$num<div class" | head -2 | grep "href" )
+verifiedUser=$(cat "/tmp/$movie/userFile.txt" | grep -A4 "$num<div class" | head -4 | tail -1 | grep "data-qa" )
 
-    if [ -n "$namedUser" ]; then
-        writeUser=$(cat "/tmp/$movie/userFile.txt" | grep "$num<div class" -A7  | head -7 | grep -A1 "audience-reviews__name" | sed 's/<a class="audience-reviews__name" data-qa="review-name" href="/User ID: /g' | sed 's/">//g' | sed 's/<div class="audience-reviews__name-wrap//g' )
-        testUser=$(echo "$writeUser" | grep "user" )
-        if [ -n "$testUser" ]; then
-            echo "Review $num $testUser" >> "/tmp/$movie/author_num.txt"
-        else
-            writeUser=$(echo "$namedUser" | tail -1 | sed 's/<a href="/User ID: /' | sed 's/">//' ) 
-            echo "Review $num $writeUser" >> "/tmp/$movie/author_num.txt"
-        fi
-        num=$(( $num + 1 ))
-    elif [ -n "$verifiedUser" ]; then
-        userName=$(echo $verifiedUser | sed 's/<span class="audience-reviews__name" data-qa="review-name">/Verified User: /' | sed 's/<\/span>//' )
-        echo "Review $num $userName" >> "/tmp/$movie/author_num.txt"
-        num=$(( $num + 1 ))
-    elif [ $num -gt $totalNum ]; then
-        break
+if [ -n "$namedUser" ]; then
+    writeUser=$(cat "/tmp/$movie/userFile.txt" | grep "$num<div class" -A7  | head -7 | grep -A1 "audience-reviews__name" | sed 's/<a class="audience-reviews__name" data-qa="review-name" href="/User ID: /g' | sed 's/">//g' | sed 's/<div class="audience-reviews__name-wrap//g' )
+    testUser=$(echo "$writeUser" | grep "user" )
+    if [ -n "$testUser" ]; then
+        echo "Review $num $testUser" >> "/tmp/$movie/author_num.txt"
     else
-        emptyUser=$(cat "/tmp/$movie/userFile.txt" | grep -A2 "$num<div class" | head -2 | grep "span" )
-        if [ -n "$emptyUser" ]; then
-            echo "Review $num User ID: Unregistered User" >> "/tmp/$movie/author_num.txt"
-        num=$(( $num + 1 ))
-        fi
+        writeUser=$(echo "$namedUser" | tail -1 | sed 's/<a href="/User ID: /' | sed 's/">//' ) 
+        echo "Review $num $writeUser" >> "/tmp/$movie/author_num.txt"
     fi
-    
+    num=$(( $num + 1 ))
+elif [ -n "$verifiedUser" ]; then
+    userName=$(echo $verifiedUser | sed 's/<span class="audience-reviews__name" data-qa="review-name">/Verified User: /' | sed 's/<\/span>//' )
+    echo "Review $num $userName" >> "/tmp/$movie/author_num.txt"
+    num=$(( $num + 1 ))
+elif [ $num -gt $totalNum ]; then
+    break
+else
+    emptyUser=$(cat "/tmp/$movie/userFile.txt" | grep -A2 "$num<div class" | head -2 | grep "span" )
+    if [ -n "$emptyUser" ]; then
+        echo "Review $num User ID: Unregistered User" >> "/tmp/$movie/author_num.txt"
+       num=$(( $num + 1 ))
+    fi
+fi
 done < "/tmp/$movie/userFile.txt"
 
-echo -ne "Working on $totalNum/$totalNum\r"
-
-echo ""
+echo "Done working on $num/$totalNum"
 echo "Done with users!"
 
 ##starRatings
@@ -102,40 +99,39 @@ echo ""
 num=1
 while read line;
 do
-    echo -ne "Working on $num/$totalNum\r"
-    numTest=$(echo $line | grep "$num")
-    # echo $pos
-    if [ -n "$numTest" ]; then
-        echo "$num Rating: $rating" >> "/tmp/$movie/Ratings.txt"
-        rating=0
-        starNum=$(cat "/tmp/$movie/stars.txt" | grep -A6 "$num star-display" | head -6) 
-        for opt in $starNum; do 
-            #echo $opt
-            full=$(echo $opt | grep "filled")
-            #echo $full
-            half=$(echo $opt | grep "half")
-            #echo $half
-            if [ -n "$full" ]; then
-                rating=$(( $rating + 1 ))
-            elif [ -n "$half" ]; then
-                rating=$(echo "$rating" + ".5" | bc)
-                break
-            else
-                rating="$rating"
-            fi
-        done
-        
-        num=$(( $num + 1 )) 
-    elif [ $num -gt $totalNum ]; then
-        break
-    fi
+echo -ne "Working on $num/$totalNum\r"
+numTest=$(echo $line | grep "$num")
+# echo $pos
+if [ -n "$numTest" ]; then
+    rating=0
+    starNum=$(cat "/tmp/$movie/stars.txt" | grep -A6 "$num star-display" | head -6) 
+    for opt in $starNum; do 
+        #echo $opt
+        full=$(echo $opt | grep "filled")
+        #echo $full
+        half=$(echo $opt | grep "half")
+        #echo $half
+        if [ -n "$full" ]; then
+            rating=$(( $rating + 1 ))
+        elif [ -n "$half" ]; then
+            rating=$(echo "$rating" + ".5" | bc)
+            break
+        else
+            rating="$rating"
+        fi
+    done
+    echo "$num Rating: $rating" >> "/tmp/$movie/Ratings.txt"
+    num=$(( $num + 1 )) 
+elif [ $num -gt $totalNum ]; then
+    break
+fi
 
-    
+
 
 done < "/tmp/$movie/stars.txt"
 
-echo -ne "Working on $totalNum/$totalNum\r"
 echo ""
+echo "Done working on $num/$totalNum"
 echo "Done with Ratings!"
 
 touch "/Users/$myUser/Desktop/$movie-Reviews.csv"
@@ -148,7 +144,7 @@ echo ""
 echo "Number,Author,Date,Rating,Review" >> "/Users/$myUser/Desktop/$movie-Reviews.csv"
 while read line; 
 do
-    
+    echo -ne "Working on $num/$totalNum\r"
 
     line_Test=$(cat "/tmp/$movie/rev_clean.txt" | grep "Review $num" | head -1)
     grab_auth=$(cat "/tmp/$movie/author_num.txt" | grep "Review $num" | head -1 | awk '{$1=$2=$3=$4=""; print$0}' )
@@ -163,9 +159,8 @@ do
     if [ $num -gt $totalNum ]; then
         break
     fi
-    echo -ne "Working on $num/$totalNum\r"
-done < "/tmp/$movie/rev_clean.txt"
 
+done < "/tmp/$movie/rev_clean.txt"
 echo ""
 echo "All done!"
 
